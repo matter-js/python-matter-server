@@ -569,7 +569,7 @@ class MatterDeviceController:
                 pairing_hint=x.pairingHint,
                 mrp_retry_interval_idle=x.mrpRetryIntervalIdle,
                 mrp_retry_interval_active=x.mrpRetryIntervalActive,
-                supports_tcp=x.supportsTcp,
+                supports_tcp=False, # TCP is provisional, so no devices out there anyway
                 addresses=x.addresses,
                 rotating_id=x.rotatingId,
             )
