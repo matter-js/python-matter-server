@@ -24,11 +24,11 @@ Python Matter Server is an officially certified Software Component that provides
   ```bash
   # Basic server (info log level)
   python -m matter_server.server
-  
+
   # Debug mode
   python -m matter_server.server --log-level debug
-  
-  # SDK debug mode  
+
+  # SDK debug mode
   python -m matter_server.server --log-level-sdk progress
   ```
 - Create `/data` directory with proper permissions if it doesn't exist
@@ -47,7 +47,7 @@ Python Matter Server is an officially certified Software Component that provides
 
 - **Development server**:
   ```bash
-  cd dashboard  
+  cd dashboard
   script/develop
   ```
   - Starts TypeScript compiler in watch mode
@@ -81,7 +81,7 @@ Python Matter Server is an officially certified Software Component that provides
 - **Individual linting tools**:
   ```bash
   scripts/run-in-env.sh ruff check --fix
-  scripts/run-in-env.sh ruff format  
+  scripts/run-in-env.sh ruff format
   scripts/run-in-env.sh pylint matter_server/ tests/
   scripts/run-in-env.sh mypy
   ```
@@ -96,7 +96,7 @@ Python Matter Server is an officially certified Software Component that provides
 3. Check dashboard is accessible if built: verify `matter_server/dashboard/` contains files
 4. Test example client: `python scripts/example.py` (requires dependencies)
 
-### Dashboard Validation  
+### Dashboard Validation
 1. Build dashboard: `cd dashboard && script/build`
 2. Verify build artifacts: check `matter_server/dashboard/js/` contains compiled JavaScript
 3. Start development server: `cd dashboard && script/develop`
@@ -114,7 +114,7 @@ SKIP=no-commit-to-branch pre-commit run --all-files
 ### Key Directories
 ```
 matter_server/           # Main Python package
-├── client/             # Matter client library  
+├── client/             # Matter client library
 ├── server/             # Matter server implementation
 ├── common/             # Shared utilities
 └── dashboard/          # Built web dashboard (auto-generated)
@@ -131,7 +131,7 @@ scripts/               # Development utilities
 
 tests/                 # Test suite (pytest-based)
 docs/                  # Documentation
-├── os_requirements.md # Operating system setup requirements  
+├── os_requirements.md # Operating system setup requirements
 ├── docker.md         # Docker deployment guide
 └── websockets_api.md  # WebSocket API documentation
 ```
@@ -147,23 +147,23 @@ docs/                  # Documentation
 ### Network Timeouts During Setup
 **SYMPTOM**: `pip install` fails with `ReadTimeoutError` from PyPI
 **CAUSE**: Matter SDK dependencies are large and can timeout on slow connections
-**SOLUTION**: 
+**SOLUTION**:
 - Retry setup: `scripts/setup.sh`
 - Use `pip install --timeout 300` for extended timeout
 - **Document as known issue** if persistent
 
-### IPv6/Networking Issues  
+### IPv6/Networking Issues
 **SYMPTOM**: Matter devices not discoverable or connection failures
 **REFERENCE**: See `docs/os_requirements.md` for complete networking requirements
 **KEY REQUIREMENTS**:
 - IPv6 support enabled on host interface
-- No multicast filtering on network equipment  
+- No multicast filtering on network equipment
 - Proper ICMPv6 Router Advertisement processing
 - For Thread devices: specific kernel options and sysctl settings
 
 ### Pre-commit Hook Failures
 **SYMPTOM**: Git commits rejected due to formatting/linting issues
-**SOLUTION**: 
+**SOLUTION**:
 ```bash
 SKIP=no-commit-to-branch pre-commit run --all-files
 scripts/run-in-env.sh ruff format  # Fix formatting
@@ -202,3 +202,51 @@ This project implements both server and client components:
 - **Deployment**: Available as Home Assistant add-on, Docker container, or standalone
 
 The separation enables scenarios where the Matter fabric continues running while consumers (like Home Assistant) restart or disconnect.
+
+## Linting and Code Quality Requirements
+
+**CRITICAL**: All code changes MUST pass linting checks before submitting PRs. The CI will fail if linting issues are present.
+
+### Required Linting Steps Before PR Submission
+
+Always run these commands before committing and pushing changes:
+
+```bash
+# Run all pre-commit checks (REQUIRED)
+SKIP=no-commit-to-branch pre-commit run --all-files
+
+# Individual linting tools for troubleshooting
+scripts/run-in-env.sh ruff check --fix      # Fix linting issues
+scripts/run-in-env.sh ruff format           # Fix formatting
+scripts/run-in-env.sh pylint matter_server/ tests/  # Check code quality
+scripts/run-in-env.sh mypy                  # Check type annotations
+```
+
+### Linting Tools Used
+
+The project uses multiple linting tools enforced via pre-commit hooks:
+
+- **ruff**: Fast Python linter and formatter (replaces flake8, isort, etc.)
+- **pylint**: Static code analysis for code quality
+- **mypy**: Static type checking
+- **codespell**: Spell checking for code and documentation
+- **File format checks**: JSON, TOML validation, trailing whitespace, end-of-file fixers
+
+### Common Linting Failures
+
+**Trailing Whitespace**: Remove all trailing spaces from lines
+**Missing Newline**: Ensure files end with a single newline character
+**Import Order**: Use `ruff format` to fix import sorting
+**Type Annotations**: Add type hints where mypy reports missing annotations
+**Spelling**: Use `codespell` to check for typos in code and comments
+
+### Automated Fixing
+
+Most linting issues can be automatically fixed:
+
+```bash
+scripts/run-in-env.sh ruff check --fix    # Auto-fix many linting issues
+scripts/run-in-env.sh ruff format         # Auto-format code
+```
+
+**Always verify changes after auto-fixing and run the full pre-commit suite before submitting.**
