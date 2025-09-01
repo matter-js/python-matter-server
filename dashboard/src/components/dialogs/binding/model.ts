@@ -47,15 +47,6 @@ export class BindingEntryDataTransformer {
       }
     }
 
-    // Validate required fields
-    if (
-      result.node === undefined ||
-      result.endpoint === undefined ||
-      result.fabricIndex === undefined
-    ) {
-      throw new Error("Missing required fields in BindingEntryStruct");
-    }
-
     return result as BindingEntryStruct;
   }
 }

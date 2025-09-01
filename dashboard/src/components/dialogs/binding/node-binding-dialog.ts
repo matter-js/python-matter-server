@@ -57,7 +57,6 @@ export class NodeBindingDialog extends LitElement {
   private fetchACLEntry(targetNodeId: number): AccessControlEntryStruct[] {
     const acl_cluster_raw: [InputType] =
       this.client.nodes[targetNodeId].attributes["0/31/0"];
-
     return Object.values(acl_cluster_raw).map((value: InputType) =>
       AccessControlEntryDataTransformer.transform(value),
     );
@@ -67,9 +66,10 @@ export class NodeBindingDialog extends LitElement {
     const rawBindings = this.fetchBindingEntry();
     try {
       const targetNodeId = rawBindings[index].node;
+      const endpoint = rawBindings[index].endpoint;
       await this.removeNodeAtACLEntry(
         this.node!.node_id,
-        this.endpoint,
+        endpoint,
         targetNodeId,
       );
       const updatedBindings = this.removeBindingAtIndex(rawBindings, index);
@@ -92,7 +92,6 @@ export class NodeBindingDialog extends LitElement {
       )
       .filter((entry): entry is Exclude<typeof entry, null> => entry !== null);
 
-    console.log(updatedACLEntries);
     await this.client.setACLEntry(targetNodeId, updatedACLEntries);
   }
 
@@ -100,15 +99,14 @@ export class NodeBindingDialog extends LitElement {
     nodeId: number,
     sourceEndpoint: number,
     entry: AccessControlEntryStruct,
-  ): AccessControlEntryStruct | null {
+  ): AccessControlEntryStruct | undefined {
     const hasSubject = entry.subjects!.includes(nodeId);
-
     if (!hasSubject) return entry;
 
     const hasTarget = entry.targets!.filter(
       (item) => item.endpoint === sourceEndpoint,
     );
-    return hasTarget.length > 0 ? null : entry;
+    return hasTarget.length > 0 ? undefined : entry;
   }
 
   private removeBindingAtIndex(
@@ -216,7 +214,7 @@ export class NodeBindingDialog extends LitElement {
       return;
     }
     if (isNaN(targetCluster) || targetCluster < 0) {
-      alert("Please enter a valid target endpoint");
+      alert("Please enter a valid target cluster");
       return;
     }
 
@@ -234,7 +232,10 @@ export class NodeBindingDialog extends LitElement {
       fabricIndex: this.client.connection.serverInfo!.fabric_id,
     };
     const result_acl = await this.add_target_acl(targetNodeId, acl_entry);
-    if (!result_acl) return;
+    if (!result_acl) {
+      alert("add target acl error!");
+      return;
+    }
 
     const endpoint = this.endpoint;
     const bindingEntry: BindingEntryStruct = {
