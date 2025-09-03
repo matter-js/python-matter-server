@@ -1,16 +1,16 @@
 
-export type AccessControlEntryRawInput = {
-  "1": number;
-  "2": number;
-  "3": number[];
-  "4": null;
-  "254": number;
-};
-
 export type AccessControlTargetStruct = {
   cluster: number | undefined;
   endpoint: number | undefined;
   deviceType: number | undefined;
+};
+
+export type AccessControlEntryRawInput = {
+  "1": number;
+  "2": number;
+  "3": number[];
+  "4": AccessControlTargetStruct[] | undefined;
+  "254": number;
 };
 
 export type AccessControlEntryStruct = {
@@ -93,15 +93,6 @@ export class AccessControlEntryDataTransformer {
           }
         }
       }
-    }
-
-    if (
-      result.privilege === undefined ||
-      result.authMode === undefined ||
-      result.subjects === undefined ||
-      result.fabricIndex === undefined
-    ) {
-      throw new Error("Missing required fields in AccessControlEntryStruct");
     }
 
     return result as AccessControlEntryStruct;
