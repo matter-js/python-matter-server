@@ -38,13 +38,13 @@ export class NodeBindingDialog extends LitElement {
   @property({ attribute: false })
   endpoint!: number;
 
-  @query("md-outlined-text-field[label='node id']")
+  @query("md-outlined-text-field[name='NodeId']")
   private _targetNodeId!: MdOutlinedTextField;
 
-  @query("md-outlined-text-field[label='endpoint']")
+  @query("md-outlined-text-field[name='Endpoint']")
   private _targetEndpoint!: MdOutlinedTextField;
 
-  @query("md-outlined-text-field[label='cluster']")
+  @query("md-outlined-text-field[name='Cluster']")
   private _targetCluster!: MdOutlinedTextField;
 
   private fetchBindingEntry(): BindingEntryStruct[] {
@@ -264,6 +264,23 @@ export class NodeBindingDialog extends LitElement {
     this.parentNode!.removeChild(this);
   }
 
+  private onChange(e: Event) {
+    const textfield = e.target as MdOutlinedTextField;
+    const value = parseInt(textfield.value, 10);
+
+    if (
+      parseInt(textfield.max, 10) < value ||
+      value < parseInt(textfield.min, 10)
+    ) {
+      textfield.error = true;
+      textfield.errorText = "value error";
+    } else {
+      textfield.error = false;
+    }
+
+    // console.log(`value: ${value} error: ${textfield.error}`);
+  }
+
   protected render() {
     const bindings = Object.values(
       this.node!.attributes[this.endpoint + "/30/0"],
@@ -298,15 +315,33 @@ export class NodeBindingDialog extends LitElement {
               <div class="group-label">target</div>
               <md-outlined-text-field
                 label="node id"
+                name="NodeId"
+                type="number"
+                min="0"
+                max="65535"
                 class="target-item"
+                @change=${this.onChange}
+                supporting-text="required"
               ></md-outlined-text-field>
               <md-outlined-text-field
                 label="endpoint"
+                name="Endpoint"
+                type="number"
+                min="0"
+                max="65535"
+                @change=${this.onChange}
                 class="target-item"
+                supporting-text="required"
               ></md-outlined-text-field>
               <md-outlined-text-field
                 label="cluster"
+                name="Cluster"
+                type="number"
+                min="0"
+                max="65535"
+                @change=${this.onChange}
                 class="target-item"
+                supporting-text="optional"
               ></md-outlined-text-field>
             </div>
           </div>
