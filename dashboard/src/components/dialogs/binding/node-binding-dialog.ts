@@ -201,21 +201,40 @@ export class NodeBindingDialog extends LitElement {
   }
 
   async addBindingHandler() {
-    const targetNodeId = parseInt(this._targetNodeId.value, 10);
-    const targetEndpoint = parseInt(this._targetEndpoint.value, 10);
-    const targetCluster = parseInt(this._targetCluster.value, 10);
+    const targetNodeId = this._targetNodeId.value
+      ? parseInt(this._targetNodeId.value, 10)
+      : undefined;
+    const targetEndpoint = this._targetEndpoint.value
+      ? parseInt(this._targetEndpoint.value, 10)
+      : undefined;
+    const targetCluster = this._targetCluster.value
+      ? parseInt(this._targetCluster.value, 10)
+      : undefined;
 
-    if (isNaN(targetNodeId) || targetNodeId <= 0) {
+    if (
+      targetNodeId === undefined ||
+      targetNodeId <= 0 ||
+      targetNodeId > 65535
+    ) {
       alert("Please enter a valid target node ID");
       return;
     }
-    if (isNaN(targetEndpoint) || targetEndpoint < 0) {
+
+    if (
+      targetEndpoint === undefined ||
+      targetEndpoint <= 0 ||
+      targetEndpoint > 65535
+    ) {
       alert("Please enter a valid target endpoint");
       return;
     }
-    if (isNaN(targetCluster) || targetCluster < 0) {
-      alert("Please enter a valid target cluster");
-      return;
+
+    // cluster optional
+    if (targetCluster !== undefined) {
+      if (targetCluster < 0 || targetCluster > 65535) {
+        alert("Please enter a valid target cluster");
+        return;
+      }
     }
 
     const targets: AccessControlTargetStruct = {
@@ -231,6 +250,7 @@ export class NodeBindingDialog extends LitElement {
       targets: [targets],
       fabricIndex: this.client.connection.serverInfo!.fabric_id,
     };
+
     const result_acl = await this.add_target_acl(targetNodeId, acl_entry);
     if (!result_acl) {
       alert("add target acl error!");
