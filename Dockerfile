@@ -26,7 +26,7 @@ RUN \
 
 ARG PYTHON_MATTER_SERVER
 
-ENV chip_example_url "https://github.com/home-assistant-libs/matter-linux-ota-provider/releases/download/2025.5.0"
+ENV chip_example_url "https://github.com/home-assistant-libs/matter-linux-ota-provider/releases/download/2025.9.0"
 ARG TARGETPLATFORM
 
 RUN \
