@@ -44,7 +44,7 @@ test = [
   "aioresponses==0.7.8",
   "codespell==2.4.1",
   "isort==6.0.1",
-  "mypy==1.17.1",
+  "mypy==1.18.1",
   "pre-commit==4.3.0",
   "pre-commit-hooks==6.0.0",
   "pylint==3.3.8",
