@@ -17,7 +17,6 @@ classifiers = [
 dependencies = [
   "aiohttp",
   "aiorun",
-  "async-timeout",
   "coloredlogs",
   "orjson",
   "home-assistant-chip-clusters==2025.7.0",
@@ -34,7 +33,6 @@ version = "0.0.0"
 server = [
   "aiohttp==3.12.15",
   "aiorun==2025.1.1",
-  "async-timeout==5.0.1",
   "atomicwrites==1.4.1",
   "coloredlogs==15.0.1",
   "cryptography==45.0.7",
