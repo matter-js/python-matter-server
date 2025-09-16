@@ -223,7 +223,7 @@ export class NodeBindingDialog extends LitElement {
     if (
       targetEndpoint === undefined ||
       targetEndpoint <= 0 ||
-      targetEndpoint > 65535
+      targetEndpoint > 0xfffe
     ) {
       alert("Please enter a valid target endpoint");
       return;
@@ -231,7 +231,8 @@ export class NodeBindingDialog extends LitElement {
 
     // cluster optional
     if (targetCluster !== undefined) {
-      if (targetCluster < 0 || targetCluster > 65535) {
+      // We ignore vendor specific clusters for now
+      if (targetCluster < 0 || targetCluster > 0x7fff) {
         alert("Please enter a valid target cluster");
         return;
       }
@@ -333,43 +334,50 @@ export class NodeBindingDialog extends LitElement {
             </md-list>
             <div class="inline-group">
               <div class="group-label">target</div>
-              <md-outlined-text-field
-                label="node id"
-                name="NodeId"
-                type="number"
-                min="0"
-                max="65535"
-                class="target-item"
-                @change=${this.onChange}
-                supporting-text="required"
-              ></md-outlined-text-field>
-              <md-outlined-text-field
-                label="endpoint"
-                name="Endpoint"
-                type="number"
-                min="0"
-                max="65535"
-                @change=${this.onChange}
-                class="target-item"
-                supporting-text="required"
-              ></md-outlined-text-field>
-              <md-outlined-text-field
-                label="cluster"
-                name="Cluster"
-                type="number"
-                min="0"
-                max="65535"
-                @change=${this.onChange}
-                class="target-item"
-                supporting-text="optional"
-              ></md-outlined-text-field>
+              <div class="group-input">
+                <md-outlined-text-field
+                  label="node id"
+                  name="NodeId"
+                  type="number"
+                  min="0"
+                  max="65535"
+                  class="target-item"
+                  @change=${this.onChange}
+                  supporting-text="required"
+                ></md-outlined-text-field>
+                <md-outlined-text-field
+                  label="endpoint"
+                  name="Endpoint"
+                  type="number"
+                  min="0"
+                  max="65534"
+                  @change=${this.onChange}
+                  class="target-item"
+                  supporting-text="required"
+                ></md-outlined-text-field>
+                <md-outlined-text-field
+                  label="cluster"
+                  name="Cluster"
+                  type="number"
+                  min="0"
+                  max="32767"
+                  @change=${this.onChange}
+                  class="target-item"
+                  supporting-text="optional"
+                ></md-outlined-text-field>
+              </div>
             </div>
             <div style="margin:8px;">
-              <p style="font-size: 10px;font-style: italic;font-weight: bold;">
-                Note: When the Cluster is empty, the binding will be applied to
-                all eligible clusters on the target endpoint. For some devices,
-                you must specify a cluster to make the binding work.
-              </p>
+              <Text
+                style="font-size: 10px;font-style: italic;font-weight: bold;"
+              >
+                Note: The Cluster ID field is optional according to the Matter
+                specification. If you leave it blank, the binding applies to all
+                eligible clusters on the target endpoint. However, some devices
+                may require a specific cluster to be set in order for the
+                binding to function correctly. If you experience unexpected
+                behavior, try specifying the cluster explicitly.
+              </Text>
             </div>
           </div>
         </div>
@@ -391,6 +399,11 @@ export class NodeBindingDialog extends LitElement {
       margin: 8px;
     }
 
+    .group-input {
+      display: flex;
+      width: -webkit-fill-available;
+    }
+
     .target-item {
       display: inline-block;
       padding: 20px 10px 10px 10px;
@@ -398,6 +411,7 @@ export class NodeBindingDialog extends LitElement {
       vertical-align: middle;
       min-width: 80px;
       text-align: center;
+      width: -webkit-fill-available;
     }
 
     .group-label {
