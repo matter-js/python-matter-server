@@ -364,6 +364,13 @@ export class NodeBindingDialog extends LitElement {
                 supporting-text="optional"
               ></md-outlined-text-field>
             </div>
+            <div style="margin:8px;">
+              <p style="font-size: 10px;font-style: italic;font-weight: bold;">
+                Note: When the Cluster is empty, the binding will be applied to
+                all eligible clusters on the target endpoint. For some devices,
+                you must specify a cluster to make the binding work.
+              </p>
+            </div>
           </div>
         </div>
         <div slot="actions">
