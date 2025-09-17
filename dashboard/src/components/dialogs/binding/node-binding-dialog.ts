@@ -211,6 +211,7 @@ export class NodeBindingDialog extends LitElement {
       ? parseInt(this._targetCluster.value, 10)
       : undefined;
 
+    // Matter Server does not use random NodeIds, so this is ok for now, but needs to be adjusted later
     if (
       targetNodeId === undefined ||
       targetNodeId <= 0 ||
