@@ -8,6 +8,11 @@ This project implements a Matter Controller Server over WebSockets using the
 [official Matter (formerly CHIP) SDK](https://github.com/project-chip/connectedhomeip)
 as a base and provides both a server and client implementation.
 
+> [!IMPORTANT]
+> We’re excited to share that the Matter Server is being rewritten on top of [matter.js](https://github.com/matter-js/matter.js)! 🎉
+> This means that the current project has moved into **maintenance mode** — we’ll still fix important bugs if they come up, but all new features will land in the new project instead.
+> We’ll post a link as soon as the first **alpha version** is ready for you to try out. 🚀
+
 The Open Home Foundation Matter Server software component is funded by [Nabu Casa](https://www.nabucasa.com/) (a member of the CSA) and donated to [The Open Home Foundation](https://www.openhomefoundation.org/).
 
 ## Support
