@@ -33,7 +33,7 @@ docker run -d \
   --security-opt apparmor=unconfined \
   -v $(pwd)/data:/data \
   --network=host \
-  ghcr.io/home-assistant-libs/python-matter-server:stable
+  ghcr.io/matter-js/python-matter-server:stable
 ```
 
 > [!NOTE]
@@ -49,7 +49,7 @@ docker run -d \
   -v $(pwd)/data:/data \
   -v /run/dbus:/run/dbus:ro \
   --network=host \
-  ghcr.io/home-assistant-libs/python-matter-server:stable --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
+  ghcr.io/matter-js/python-matter-server:stable --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
 ```
 
 ## Running using Docker compose
@@ -58,7 +58,7 @@ docker run -d \
 services:
   # python-matter-server
   matter-server:
-    image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    image: ghcr.io/matter-js/python-matter-server:stable
     container_name: matter-server
     restart: unless-stopped
     # Required for mDNS to work correctly
