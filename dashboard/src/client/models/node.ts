@@ -21,7 +21,7 @@ export class MatterNode {
 
   get nodeLabel(): string {
     const label = this.attributes["0/40/5"];
-    if (!label) return '';
+    if (typeof label !== "string") return '';
     if (label.includes("\u0000\u0000")) return '';
     return label.trim();
   }
