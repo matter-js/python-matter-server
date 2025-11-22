@@ -23,7 +23,7 @@ The only supported operating systems for developing or running the Matter Server
 
 For a MacOS (development) environment, things will work fine out of the box from MacOS 14 or higher (arm-based CPU). In combination with a python venv, it makes up for the recommended development environment for working on the Matter codebase.
 
-For a Linux operating system, keep the following recomemndations in mind:
+For a Linux operating system, keep the following recommendations in mind:
 
 > your host must process ICMPv6 Router Advertisements. See the [openthread.io
 > Bidirectional IPv6 Connectivity code labs](https://openthread.io/codelabs/openthread-border-router#6)
