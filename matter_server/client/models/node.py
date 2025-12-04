@@ -223,7 +223,7 @@ class MatterEndpoint:
             self.set_attribute_value(attribute_path, attribute_value)
         # extract device types from Descriptor Cluster
         if cluster := self.get_cluster(Clusters.Descriptor):
-            for dev_info in cluster.deviceTypeList:  # type: ignore[unreachable]
+            for dev_info in cluster.deviceTypeList:
                 device_type = DEVICE_TYPES.get(dev_info.deviceType)
                 if device_type is None:
                     LOGGER.debug("Found unknown device type %s", dev_info)
@@ -352,7 +352,7 @@ class MatterNode:
                     endpoint.endpoint_id,
                 )
                 continue
-            if descriptor.partsList:  # type: ignore[unreachable]
+            if descriptor.partsList:
                 for endpoint_id in descriptor.partsList:
                     self._composed_endpoints[endpoint_id] = endpoint.endpoint_id
 

@@ -115,6 +115,9 @@ class EveCluster(Cluster, CustomClusterMixin):
                     Label="current", Tag=0x130A0009, Type=float32
                 ),
                 ClusterObjectFieldDescriptor(
+                    Label="obstructionDetected", Tag=0x130A0010, Type=bool
+                ),
+                ClusterObjectFieldDescriptor(
                     Label="altitude", Tag=0x130A0013, Type=float32
                 ),
                 ClusterObjectFieldDescriptor(
@@ -143,6 +146,7 @@ class EveCluster(Cluster, CustomClusterMixin):
     weatherTrend: int | None = None
     valvePosition: int | None = None
     motionSensitivity: int | None = None
+    obstructionDetected: bool | None = None
 
     class Attributes:
         """Attributes for the Eve Cluster."""
@@ -284,6 +288,29 @@ class EveCluster(Cluster, CustomClusterMixin):
                 return ClusterObjectFieldDescriptor(Type=float32)
 
             value: float32 = 0
+
+        @dataclass
+        class ObstructionDetected(
+            ClusterAttributeDescriptor, CustomClusterAttributeMixin
+        ):
+            """ObstructionDetected Attribute within the Eve Cluster."""
+
+            @ChipUtility.classproperty
+            def cluster_id(cls) -> int:
+                """Return cluster id."""
+                return 0x130AFC01
+
+            @ChipUtility.classproperty
+            def attribute_id(cls) -> int:
+                """Return attribute id."""
+                return 0x130A0010
+
+            @ChipUtility.classproperty
+            def attribute_type(cls) -> ClusterObjectFieldDescriptor:
+                """Return attribute type."""
+                return ClusterObjectFieldDescriptor(Type=bool)
+
+            value: bool = False
 
         @dataclass
         class Altitude(ClusterAttributeDescriptor, CustomClusterAttributeMixin):

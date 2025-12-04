@@ -296,6 +296,13 @@ class MatterDeviceController:
     @api_command(APICommand.SET_DEFAULT_FABRIC_LABEL)
     async def set_default_fabric_label(self, label: str | None) -> None:
         """Set the default fabric label."""
+        if label is not None and len(label) > 32:
+            LOGGER.info(
+                "Fabric label '%s' exceeds 32 characters, truncating to '%s'",
+                label,
+                label[:32],
+            )
+            label = label[:32]
         self._default_fabric_label = label
 
     @api_command(APICommand.COMMISSION_WITH_CODE)
@@ -569,7 +576,8 @@ class MatterDeviceController:
                 pairing_hint=x.pairingHint,
                 mrp_retry_interval_idle=x.mrpRetryIntervalIdle,
                 mrp_retry_interval_active=x.mrpRetryIntervalActive,
-                supports_tcp=x.supportsTcp,
+                # TCP is provisional, so no devices out there anyway
+                supports_tcp=False,
                 addresses=x.addresses,
                 rotating_id=x.rotatingId,
             )

@@ -9,7 +9,6 @@ import logging
 from typing import TYPE_CHECKING, Any, Final
 
 from aiohttp import WSMsgType, web
-import async_timeout
 from chip.exceptions import ChipStackError
 
 from matter_server.common.const import VERBOSE_LOG_LEVEL
@@ -76,7 +75,7 @@ class WebsocketClientHandler:
         request = self.request
         wsock = self.wsock
         try:
-            async with async_timeout.timeout(10):
+            async with asyncio.timeout(10):
                 await wsock.prepare(request)
         except asyncio.TimeoutError:
             self._logger.warning("Timeout preparing request from %s", request.remote)

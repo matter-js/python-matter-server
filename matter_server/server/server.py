@@ -89,7 +89,7 @@ def mount_websocket(server: MatterServer, path: str) -> None:
         for client in set(clients):
             await client.disconnect()
 
-    server.app.on_shutdown.append(_handle_shutdown)  # type: ignore[arg-type]
+    server.app.on_shutdown.append(_handle_shutdown)
     server.app.router.add_route("GET", path, _handle_ws)
 
 
@@ -147,6 +147,11 @@ class MatterServer:
             raise RuntimeError(
                 "Minimum supported schema version can't be higher than current schema version."
             )
+        self.logger.info("Matter Server initialized")
+        self.logger.info(
+            "Using '%s' as primary interface (for link-local addresses)",
+            self.primary_interface,
+        )
 
     @cached_property
     def device_controller(self) -> MatterDeviceController:
