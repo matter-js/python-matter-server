@@ -664,6 +664,12 @@ class HeimanCluster(Cluster, CustomClusterMixin):
                 ClusterObjectFieldDescriptor(
                     Label="sensorType", Tag=0x00120B0013, Type=uint
                 ),
+                ClusterObjectFieldDescriptor(
+                    Label="sirenActive", Tag=0x00120B0014, Type=uint
+                ),
+                ClusterObjectFieldDescriptor(
+                    Label="alarmMute", Tag=0x00120B0015, Type=uint
+                ),
             ]
         )
 
@@ -671,6 +677,8 @@ class HeimanCluster(Cluster, CustomClusterMixin):
     preheatingState: uint | None = None
     noDisturbingState: uint | None = None
     sensorType: uint | None = None
+    sirenActive: uint | None = None
+    alarmMute: uint | None = None
 
     class Attributes:
         """Attributes for the Heiman Cluster."""
@@ -753,6 +761,48 @@ class HeimanCluster(Cluster, CustomClusterMixin):
             def attribute_id(cls) -> int:
                 """Return attribute id."""
                 return 0x00120B0013
+
+            @ChipUtility.classproperty
+            def attribute_type(cls) -> ClusterObjectFieldDescriptor:
+                """Return attribute type."""
+                return ClusterObjectFieldDescriptor(Type=uint)
+
+            value: uint = 0
+
+        @dataclass
+        class SirenActive(ClusterAttributeDescriptor, CustomClusterAttributeMixin):
+            """SirenActive Attribute within the Heiman Cluster."""
+
+            @ChipUtility.classproperty
+            def cluster_id(cls) -> int:
+                """Return cluster id."""
+                return 0x120BFC01
+
+            @ChipUtility.classproperty
+            def attribute_id(cls) -> int:
+                """Return attribute id."""
+                return 0x00120B0014
+
+            @ChipUtility.classproperty
+            def attribute_type(cls) -> ClusterObjectFieldDescriptor:
+                """Return attribute type."""
+                return ClusterObjectFieldDescriptor(Type=uint)
+
+            value: uint = 0
+
+        @dataclass
+        class AlarmMute(ClusterAttributeDescriptor, CustomClusterAttributeMixin):
+            """AlarmMute Attribute within the Heiman Cluster."""
+
+            @ChipUtility.classproperty
+            def cluster_id(cls) -> int:
+                """Return cluster id."""
+                return 0x120BFC01
+
+            @ChipUtility.classproperty
+            def attribute_id(cls) -> int:
+                """Return attribute id."""
+                return 0x00120B0015
 
             @ChipUtility.classproperty
             def attribute_type(cls) -> ClusterObjectFieldDescriptor:
