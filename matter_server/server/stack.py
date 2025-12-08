@@ -33,7 +33,7 @@ CHIP_AUTOMATION = logging.DEBUG - 2
 _category_num: int = 4
 
 
-@LogRedirectCallback_t  # type: ignore[misc]
+@LogRedirectCallback_t  # type: ignore[untyped-decorator]
 def _redirect_to_python_logging(
     category: int, raw_module: bytes, raw_message: bytes
 ) -> None:
