@@ -130,7 +130,7 @@ class EveCluster(Cluster, CustomClusterMixin):
                     Label="valvePosition", Tag=0x130A0018, Type=int
                 ),
                 ClusterObjectFieldDescriptor(
-                    Label="motionSensitivity", Tag=0x130A000D, Type=int
+                    Label="motionSensitivity", Tag=0x130A000D, Type=uint
                 ),
             ]
         )
@@ -415,7 +415,7 @@ class EveCluster(Cluster, CustomClusterMixin):
             @ChipUtility.classproperty
             def attribute_type(cls) -> ClusterObjectFieldDescriptor:
                 """Return attribute type."""
-                return ClusterObjectFieldDescriptor(Type=int)
+                return ClusterObjectFieldDescriptor(Type=uint)
 
             value: int = 0
 
