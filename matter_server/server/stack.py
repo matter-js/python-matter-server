@@ -30,7 +30,7 @@ CHIP_PROGRESS = logging.INFO - 1
 CHIP_DETAIL = logging.DEBUG - 1
 CHIP_AUTOMATION = logging.DEBUG - 2
 
-_category_num: int = 4
+_category_num: int = 4  # pylint: disable=invalid-name
 
 
 @LogRedirectCallback_t  # type: ignore[misc]
