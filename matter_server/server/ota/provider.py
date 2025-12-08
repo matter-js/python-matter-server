@@ -318,17 +318,9 @@ class ExternalOtaProvider:
                 "No OTA checksum type or not supported, OTA will not be checked."
             )
 
-        if parsed_url.scheme in ["http", "https"]:
-            file_path = await self._download_update(url, checksum_alg)
-        elif parsed_url.scheme in ["file"]:
-            file_path = self._ota_provider_base_dir / Path(parsed_url.path[1:])
-            if not await asyncio.to_thread(file_path.exists):
-                LOGGER.warning("Local update file not found: %s", file_path)
-                raise UpdateError("Local update file not found")
-            if checksum_alg:
-                checksum_alg.update(await asyncio.to_thread(file_path.read_bytes))
-        else:
-            raise UpdateError("Unsupported OTA URL scheme")
+        if parsed_url.scheme != "https":
+            raise UpdateError("Only HTTPS URLs are supported for OTA updates")
+        file_path = await self._download_update(url, checksum_alg)
 
         # Download finished, check checksum if necessary
         if checksum_alg:
