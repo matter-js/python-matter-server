@@ -27,7 +27,10 @@ function getUniqueClusters(node: MatterNode, endpoint: Number) {
 export function getEndpointDeviceTypes(node: MatterNode, endpoint: Number): DeviceType[] {
   const rawValues: Record<string, number>[] | undefined = node.attributes[`${endpoint}/29/0`];
   if (!rawValues) return [];
-  return rawValues.map((rawValue) => { return device_types[rawValue["0"] || rawValue["deviceType"]] })
+  return rawValues.map((rawValue) => {
+    const id = rawValue["0"] ?? rawValue["deviceType"];
+    return device_types[id] || { id: id ?? -1, label: "Unknown Device Type", clusters: [] };
+  });
 }
 
 @customElement("matter-endpoint-view")
