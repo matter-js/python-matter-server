@@ -29,7 +29,7 @@ export function getEndpointDeviceTypes(node: MatterNode, endpoint: Number): Devi
   if (!rawValues) return [];
   return rawValues.map((rawValue) => {
     const id = rawValue["0"] ?? rawValue["deviceType"];
-    return device_types[id] || { id: id ?? -1, label: "Unknown Device Type", clusters: [] };
+    return device_types[id] || { id: id ?? -1, label: `Unknown Device Type (${id})`, clusters: [] };
   });
 }
 
