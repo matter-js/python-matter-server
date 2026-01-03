@@ -22,6 +22,10 @@ async function main() {
         alert("Unable to connect without URL");
         return;
       }
+      if (suggestedUrl) {
+        // Remove suggested url from address without redirecting
+        history.pushState({}, "", window.location.pathname);
+      }
       localStorage.setItem("matterURL", storageUrl);
     }
     url = storageUrl;
