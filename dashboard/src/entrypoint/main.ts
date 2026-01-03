@@ -6,15 +6,17 @@ async function main() {
   let url = "";
 
   // Detect if we're running in the (production) webserver included in the matter server or not.
-  const isProductionServer = location.href.includes(":5580") || location.href.includes("hassio_ingress") || location.href.includes("/api/ingress/");
+  const isProductionServer = location.origin.includes(":5580") || location.href.includes("hassio_ingress") || location.href.includes("/api/ingress/");
 
   if (!isProductionServer) {
     // development server, ask for url to matter server
     let storageUrl = localStorage.getItem("matterURL");
     if (!storageUrl) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const suggestedUrl = urlParams.get('url');
       storageUrl = prompt(
         "Enter Websocket URL to a running Matter Server",
-        "ws://localhost:5580/ws"
+        suggestedUrl || "ws://localhost:5580/ws"
       );
       if (!storageUrl) {
         alert("Unable to connect without URL");
