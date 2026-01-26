@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import TYPE_CHECKING, Any, Final, cast
+from typing import TYPE_CHECKING, Any, Final, Self, cast
 import uuid
 
 from chip.clusters import Objects as Clusters
@@ -788,7 +788,7 @@ class MatterClient:
                     for callback in self._subscribers.get(key, []):
                         callback(event, data)
 
-    async def __aenter__(self) -> "MatterClient":
+    async def __aenter__(self) -> Self:
         """Initialize and connect the Matter Websocket client."""
         await self.connect()
         return self
