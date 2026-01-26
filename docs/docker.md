@@ -1,6 +1,6 @@
 # Running Matter Server in Docker
 
-For testing/evaluation purposes or as a guideline towards other application developers that want to run the Matter Server, we do provide an [official Docker container image](https://github.com/home-assistant-libs/python-matter-server/pkgs/container/python-matter-server). Just make sure that the underlying operating system on which you intend to run the docker container matches the [requirements needed for Matter and Thread](os_requirements.md) so better not attempt to run it on a specific purpose operating system such as a NAS.
+For testing/evaluation purposes or as a guideline towards other application developers that want to run the Matter Server, we do provide an [official Docker container image](https://github.com/matter-js/python-matter-server/pkgs/container/python-matter-server). Just make sure that the underlying operating system on which you intend to run the docker container matches the [requirements needed for Matter and Thread](os_requirements.md) so better not attempt to run it on a specific purpose operating system such as a NAS.
 
 > [!NOTE] **Attention Home Assistant users:** The docker image is provided as-is and without official support (due to all the complex requirements to the underlying host/OS). Use it at your own risk if you know what you're doing.
 
