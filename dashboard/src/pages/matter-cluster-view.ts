@@ -30,7 +30,8 @@ function clusterAttributes(
     .map((key) => {
       const attributeKey = Number(key.split("/")[2]);
       return { key: attributeKey, value: attributes[key] };
-    }, []);
+    }, [])
+    .toSorted((a, b) => a.key - b.key);
 }
 
 @customElement("matter-cluster-view")
