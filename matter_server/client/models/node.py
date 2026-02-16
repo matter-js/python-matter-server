@@ -358,7 +358,7 @@ class MatterNode:
 
     def update_attribute(self, attribute_path: str, new_value: Any) -> None:
         """Handle Attribute value update."""
-        endpoint_id = int(attribute_path.split("/")[0])
+        endpoint_id = int(attribute_path.split("/", maxsplit=1)[0])
         if endpoint_id not in self.endpoints:
             # race condition when a bridge is in the process of adding a new endpoint
             return
