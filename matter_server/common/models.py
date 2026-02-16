@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime  # noqa: TC003
-from enum import Enum
+from enum import Enum, StrEnum
 from typing import Any
 
 # Enums and constants
@@ -25,7 +25,7 @@ class EventType(Enum):
     ENDPOINT_REMOVED = "endpoint_removed"
 
 
-class APICommand(str, Enum):
+class APICommand(StrEnum):
     """Enum with all known API commands."""
 
     START_LISTENING = "start_listening"
