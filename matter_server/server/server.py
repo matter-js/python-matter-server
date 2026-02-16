@@ -297,7 +297,7 @@ class MatterServer:
 
         if ip_addr_parsed.scope_id is not None:
             # This type of IPv6 manipulation is not supported by the ipaddress lib
-            ip_addr = ip_addr.split("%")[0]
+            ip_addr = ip_addr.split("%", maxsplit=1)[0]
 
         # Rely on host OS routing table
         if self.primary_interface is None:
