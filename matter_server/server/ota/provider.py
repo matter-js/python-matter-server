@@ -320,7 +320,7 @@ class ExternalOtaProvider:
 
         if parsed_url.scheme in ["http", "https"]:
             file_path = await self._download_update(url, checksum_alg)
-        elif parsed_url.scheme in ["file"]:
+        elif parsed_url.scheme == "file":
             file_path = self._ota_provider_base_dir / Path(parsed_url.path[1:])
             if not await asyncio.to_thread(file_path.exists):
                 LOGGER.warning("Local update file not found: %s", file_path)
