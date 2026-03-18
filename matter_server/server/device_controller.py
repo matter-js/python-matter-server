@@ -318,7 +318,11 @@ class MatterDeviceController:
         :return: The NodeInfo of the commissioned device.
         """
         if not network_only and not self.server.bluetooth_enabled:
-            raise NodeCommissionFailed("Bluetooth commissioning is not available.")
+            raise NodeCommissionFailed(
+                "Bluetooth commissioning is not available. "
+                "Ensure a Bluetooth adapter is configured in the Matter Server settings, "
+                "or use network_only mode if the device is already on the network."
+            )
 
         node_id = self._get_next_node_id()
         LOGGER.info(
@@ -342,7 +346,7 @@ class MatterDeviceController:
                 raise RuntimeError("Returned Node ID must match requested Node ID")
         except ChipStackError as err:
             raise NodeCommissionFailed(
-                f"Commission with code failed for node {node_id}."
+                f"Commission with code failed for node {node_id}: {err}"
             ) from err
 
         LOGGER.info("Matter commissioning of Node ID %s successful.", node_id)
@@ -428,7 +432,7 @@ class MatterDeviceController:
                 raise RuntimeError("Returned Node ID must match requested Node ID")
         except ChipStackError as err:
             raise NodeCommissionFailed(
-                f"Commissioning failed for node {node_id}."
+                f"Commissioning failed for node {node_id}: {err}"
             ) from err
 
         LOGGER.info("Matter commissioning of Node ID %s successful.", node_id)
@@ -595,7 +599,9 @@ class MatterDeviceController:
                 )
             )
         except ChipStackError as err:
-            raise NodeInterviewFailed(f"Failed to interview node {node_id}") from err
+            raise NodeInterviewFailed(
+                f"Failed to interview node {node_id}: {err}"
+            ) from err
 
         # Set label if specified and needed
         if self._default_fabric_label:

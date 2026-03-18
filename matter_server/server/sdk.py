@@ -398,7 +398,7 @@ class ChipDeviceControllerWrapper:
                 if attempt >= retries:
                     # when we're out of retries, raise NodeNotResolving
                     raise NodeNotResolving(
-                        f"Unable to establish CASE session with Node {node_id}"
+                        f"Unable to establish CASE session with Node {node_id}: {err}"
                     ) from err
                 await asyncio.sleep(2 + attempt)
             finally:
