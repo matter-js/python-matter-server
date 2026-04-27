@@ -10,7 +10,7 @@ import logging
 import os
 from pathlib import Path
 import traceback
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 import weakref
 
 from aiohttp import web
@@ -292,8 +292,6 @@ class MatterServer:
         ip_addr_parsed = ipaddress.ip_address(ip_addr)
         if not ip_addr_parsed.is_link_local or ip_addr_parsed.version != 6:
             return ip_addr
-
-        ip_addr_parsed = cast(ipaddress.IPv6Address, ip_addr_parsed)
 
         if ip_addr_parsed.scope_id is not None:
             # This type of IPv6 manipulation is not supported by the ipaddress lib
