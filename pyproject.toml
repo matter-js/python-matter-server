@@ -35,7 +35,7 @@ server = [
   "aiorun==2025.1.1",
   "atomicwrites==1.4.1",
   "coloredlogs==15.0.1",
-  "cryptography==46.0.7",
+  "cryptography==47.0.0",
   "orjson==3.11.8",
   "zeroconf==0.148.0",
   "home-assistant-chip-core==2025.7.0",
