@@ -1,0 +1,58 @@
+name: Rebuild container image (scheduled)
+
+# Weekly rebuild of the python-matter-server container with a fresh
+# python:3.12-slim-bookworm base. This catches OS security fixes that
+# accumulate between PyPI releases — same Dockerfile, no source changes,
+# rebuilt against the latest published python-matter-server version.
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Sunday 04:00 UTC
+    - cron: '0 4 * * 0'
+
+jobs:
+  rebuild-container:
+    name: Rebuild container with fresh base
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: Look up latest released python-matter-server version
+        id: ver
+        run: |
+          LATEST=$(curl -fsS https://pypi.org/pypi/python-matter-server/json | jq -r .info.version)
+          if [ -z "$LATEST" ] || [ "$LATEST" = "null" ]; then
+            echo "Could not fetch latest version from PyPI" >&2
+            exit 1
+          fi
+          echo "version=$LATEST" >> "$GITHUB_OUTPUT"
+          echo "minor=${LATEST%.*}" >> "$GITHUB_OUTPUT"
+          echo "major=${LATEST%%.*}" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to the GitHub container registry
+        uses: docker/login-action@v4.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4.0.0
+
+      - name: Build and push refreshed :stable
+        uses: docker/build-push-action@v7.1.0
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          file: Dockerfile
+          pull: true
+          push: true
+          build-args: "PYTHON_MATTER_SERVER=${{ steps.ver.outputs.version }}"
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/python-matter-server:${{ steps.ver.outputs.version }},
+            ghcr.io/${{ github.repository_owner }}/python-matter-server:${{ steps.ver.outputs.minor }},
+            ghcr.io/${{ github.repository_owner }}/python-matter-server:${{ steps.ver.outputs.major }},
+            ghcr.io/${{ github.repository_owner }}/python-matter-server:stable
