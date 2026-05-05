@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from aiohttp import ClientError, ClientSession
+from aiohttp import ClientError, ClientSession, ClientTimeout
 
 from ..common.helpers.api import api_command
 from ..common.helpers.util import dataclass_from_dict, dataclass_to_dict
@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 LOGGER = logging.getLogger(__name__)
 PRODUCTION_URL = "https://on.dcl.csa-iot.org"
 DATA_KEY_VENDOR_INFO = "vendor_info"
+DCL_REQUEST_TIMEOUT = ClientTimeout(total=30)
 
 
 TEST_VENDOR = VendorInfoModel(
@@ -71,7 +72,9 @@ class VendorInfo:
         LOGGER.info("Fetching the latest vendor info from DCL.")
         vendors: dict[int, VendorInfoModel] = {}
         try:
-            async with ClientSession(raise_for_status=True) as session:
+            async with ClientSession(
+                raise_for_status=True, timeout=DCL_REQUEST_TIMEOUT
+            ) as session:
                 page_token: str | None = ""
                 while page_token is not None:
                     async with session.get(
@@ -93,8 +96,10 @@ class VendorInfo:
                                 creator=vendorinfo["creator"],
                             )
                     page_token = data.get("pagination", {}).get("next_key", None)
-        except ClientError as err:
-            LOGGER.error("Unable to fetch vendor info from DCL: %s", err)
+        except (ClientError, TimeoutError) as err:
+            LOGGER.warning(
+                "Unable to fetch vendor info from DCL: %s", err, exc_info=err
+            )
         else:
             LOGGER.info("Fetched %s vendors from DCL.", len(vendors))
 
