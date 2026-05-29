@@ -37,7 +37,7 @@ server = [
   "coloredlogs==15.0.1",
   "cryptography==48.0.0",
   "orjson==3.11.9",
-  "zeroconf==0.149.7",
+  "zeroconf==0.149.16",
   "home-assistant-chip-core==2025.7.0",
 ]
 test = [
